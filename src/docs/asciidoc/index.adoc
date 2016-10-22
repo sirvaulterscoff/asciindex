@@ -1,0 +1,21 @@
+= ASCIIDOC Indexer
+
+== About
+
+This project is intented to be use together with excelent documenting tool http://www.methods.co.nz/asciidoc/[asciidoc]
+It's intended to fill the missing features of project documentation, such as:
+
+1. fulltext search
+2. version diff
+
+== Using asciindex
+
+Asciindex provides simple REST API to interact with.
+Start by invoking
+
+[source,bash]
+----
+#> http put :8080/index/spring-boot/1.4.0 url:http://docs.spring.io/spring-boot/docs/1.4.0.RELEASE/reference/htmlsingle/
+----
+
+NOTE: this example uses brilliant httpie command line tool, which can be found https://github.com/jkbrzt/httpie[here]

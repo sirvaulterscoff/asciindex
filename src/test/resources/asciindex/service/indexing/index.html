@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Asciidoctor 1.5.3">
+    <title>ASCIIDOC Indexer</title>
+</head>
+<body class="article">
+<div id="header">
+    <h1>ASCIIDOC Indexer</h1>
+</div>
+<div id="content">
+    <div class="sect1">
+        <h2 id="_about">About</h2>
+        <div class="sectionbody">
+            <div class="paragraph">
+                <p>This project is intented to be use together with excelent documenting tool <a href="http://www.methods.co.nz/asciidoc/">asciidoc</a>
+                    It&#8217;s intended to fill the missing features of project documentation, such as:</p>
+            </div>
+            <div class="olist arabic">
+                <ol class="arabic">
+                    <li>
+                        <p>fulltext search</p>
+                    </li>
+                    <li>
+                        <p>version diff</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="sect1">
+        <h2 id="_using_asciindex">Using asciindex</h2>
+        <div class="sectionbody">
+            <div class="paragraph">
+                <p>Asciindex provides simple REST API to interact with.
+                    Start by invoking</p>
+            </div>
+            <div class="listingblock">
+                <div class="content">
+                    <pre class="highlight"><code class="language-bash" data-lang="bash">#&gt; http put :8080/index/spring-boot/1.4.0 url:http://docs.spring.io/spring-boot/docs/1.4.0.RELEASE/reference/htmlsingle/</code></pre>
+                </div>
+            </div>
+            <div class="admonitionblock note">
+                <table>
+                    <tr>
+                        <td class="icon">
+                            <div class="title">Note</div>
+                        </td>
+                        <td class="content">
+                            this example uses brilliant httpie command line tool, which can be found <a href="https://github.com/jkbrzt/httpie">here</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="footer">
+    <div id="footer-text">
+        Last updated 2016-09-18 15:32:51 +03:00
+    </div>
+</div>
+</body>
+</html>
