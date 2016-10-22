@@ -1,0 +1,13 @@
+language: java
+./gradlew check
+
+jdk:
+  - oraclejdk8
+  - openjdk8
+
+after_success:
+  - ./gradlew cobertura coveralls
+
+env:
+  global:
+    - COVERALLS_REPO_TOKEN=${coverallKey}
