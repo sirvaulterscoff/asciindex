@@ -15,7 +15,7 @@ buildscript {
 }
 
 plugins {
-	id 'net.saliman.cobertura' version '2.3.1'
+	id 'jacoco'
 	id 'com.github.kt3k.coveralls' version '2.6.3'
 }
 
@@ -37,6 +37,12 @@ repositories {
 	mavenCentral()
 }
 
+jacocoTestReport {
+	reports {
+		xml.enabled = true // coveralls plugin depends on xml format report
+		html.enabled = true
+	}
+}
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
@@ -58,3 +64,4 @@ dependencies {
 }
 
 compileJava.dependsOn(processResources)
+cobertura.coverageSourceDirs = sourceSets.main.groovy.srcDirs
