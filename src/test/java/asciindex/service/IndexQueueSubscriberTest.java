@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.reactivestreams.Subscription;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Signal;
 import reactor.core.publisher.WorkQueueProcessor;
 
 import java.util.UUID;
@@ -49,16 +50,15 @@ public class IndexQueueSubscriberTest {
 
 	@Test
 	public void afterMessageInTheStreamIndexWillBeInvokedAndNewStatusSet() {
-		WorkQueueProcessor<String> flux = WorkQueueProcessor.create();
-		when(indexQueueService.getPublishEventStream()).thenReturn(flux);
+		final String id = UUID.randomUUID().toString();
+		Flux<String> f = Flux.just(id);
+		WorkQueueProcessor<String> queueProcessor = WorkQueueProcessor.create();
+		when(indexQueueService.getPublishEventStream()).thenReturn(f);
 		IndexQueueSubscriber indexQueueSubscriber = new IndexQueueSubscriber(indexQueueService);
 		indexQueueSubscriber.init();
 
 
-		final String id = UUID.randomUUID().toString();
-		flux.onNext(id);
-		flux.onComplete();
-		flux.blockFirst();
+		f.awaitOnSubscribe();
 
 		verify(indexQueueService).index(eq(id));
 		verify(indexQueueService).updateStatus(eq(id), eq(IndexTaskStatus.DONE));
