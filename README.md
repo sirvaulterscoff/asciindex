@@ -1,4 +1,4 @@
-# ASIINDEX Project
+# ASCIINDEX Project
 
 [![Build Status](https://travis-ci.org/sirvaulterscoff/asciindex.svg?branch=master)](https://travis-ci.org/sirvaulterscoff/asciindex)
 [![Coverage Status](https://coveralls.io/repos/github/sirvaulterscoff/asciindex/badge.svg?branch=master)](https://coveralls.io/github/sirvaulterscoff/asciindex?branch=master)
