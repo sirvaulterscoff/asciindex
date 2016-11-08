@@ -45,6 +45,8 @@ public class IndexQueueService {
 		elasticsearchTemplate.createIndex(IndexTask.class);
 		elasticsearchTemplate.putMapping(IndexTask.class);
 		elasticsearchTemplate.refresh(IndexTask.class);
+		elasticsearchTemplate.createIndex(Documentation.class);
+		elasticsearchTemplate.putMapping(Documentation.class);
 	}
 
 	public String addToQueue(String project, String version, String content) {

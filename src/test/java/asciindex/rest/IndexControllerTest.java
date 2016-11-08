@@ -3,12 +3,12 @@ package asciindex.rest;
 import asciindex.dao.ProjectRepository;
 import asciindex.model.es.project.Project;
 import asciindex.service.IndexQueueService;
+import asciindex.service.ProjectService;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -16,7 +16,6 @@ import org.mockserver.client.server.MockServerClient;
 import org.mockserver.junit.MockServerRule;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.NoSuchAlgorithmException;
@@ -24,7 +23,6 @@ import java.security.SecureRandom;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static java.security.SecureRandom.*;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
@@ -45,7 +43,7 @@ public class IndexControllerTest {
 	@Mock
 	IndexQueueService indexQueueService;
 	@Mock
-	ProjectRepository projectRepository;
+	ProjectService projectService;
 
 	IndexController indexController;
 
@@ -60,7 +58,7 @@ public class IndexControllerTest {
 		RestAssuredMockMvc.standaloneSetup(indexController);
 		MockitoAnnotations.initMocks(this);
 
-		indexController =  new IndexController(new RestTemplate(), indexQueueService, projectRepository);
+		indexController =  new IndexController(new RestTemplate(), indexQueueService, projectService);
 	}
 
 	@Test
@@ -112,7 +110,7 @@ public class IndexControllerTest {
 				.body(INDEXED_CONTENT)
 		.when()
 				.put(INDEX_PATH, PROJECT, V1);
-		verify(projectRepository).save(Matchers.<Project>any(Project.class));
-		verifyNoMoreInteractions(projectRepository);
+		verify(projectService).saveOrUpdate(eq(PROJECT), eq(V1));
+		verifyNoMoreInteractions(projectService);
 	}
 }

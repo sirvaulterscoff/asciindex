@@ -14,15 +14,16 @@ import java.util.List;
  * @author Alex
  * @since 22.09.2016
  */
-@Document(indexName = "#{configuration.indexName}", type = "documentation")
+@Document(indexName = "#{configuration.indexName}", type = Documentation.TYPE)
 public class Documentation {
+	public static final String TYPE = "content";
 	@Id
 	private String id;
 	@CompletionField
 	private String project;
 	@CompletionField
 	private String version;
-	@Field(type = FieldType.Nested, index = FieldIndex.analyzed)
+	@Field(type = FieldType.Nested, index = FieldIndex.analyzed, includeInParent = true)
 	private List<ChapterInfo> chapters;
 
 	public Documentation() {

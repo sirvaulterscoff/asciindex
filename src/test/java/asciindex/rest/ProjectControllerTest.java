@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -41,8 +42,9 @@ public class ProjectControllerTest {
 	public static final String P1 = "asciindex";
 	public static final String P2 = "spring-boot";
 	public static final String P3 = "spring-security";
-	public static final String[] PROJECTS = {P1, P1, P2, P2, P3};
-	public static final String[] VERSIONS = {"1.0.0", "1.0.1", "1.4.0", "1.4.1", "n/a"};
+	public static final String[] PROJECTS = {P1, P2, P3};
+	public static final String[][] VERSIONS = {{"1.0.0", "1.0.1"}, {"1.4.0", "1.4.1"}, {"n/a"}};
+	public static final String[] ACTIVE_VERSIONS = {"1.0.1", "1.4.1", "n/a"};
 	public static final String PROJECTS_URL = "/project";
 	private static final String PROJECT_URL = "/project/{id}";
 	private String[] ids = new String[PROJECTS.length];
@@ -55,8 +57,9 @@ public class ProjectControllerTest {
 	public void setUp() throws Exception {
 		for (int i = 0; i < PROJECTS.length; i++) {
 			String project = PROJECTS[i];
-			String version = VERSIONS[i];
-			Project entity = new Project(project, version);
+			String[] versions = VERSIONS[i];
+			Project entity = new Project(project, Arrays.asList(versions));
+			entity.setActiveVersion(ACTIVE_VERSIONS[i]);
 			entity = projectService.save(entity);
 			ids[i] = entity.getId();
 		}
@@ -64,6 +67,7 @@ public class ProjectControllerTest {
 
 	@Test
 	public void willReturnListOfProjects() {
+		//@formatter:off
 		given()
 				.standaloneSetup(projectController)
 				.when()
@@ -71,21 +75,39 @@ public class ProjectControllerTest {
 				.then()
 					.statusCode(HttpStatus.OK.value())
 					.body("sort()", is(Arrays.asList(P1, P2, P3)));
+		//@formatter:on
 	}
 
 	@Test
 	public void will_return_list_of_versions_for_project() {
+		//@formatter:off
 		String projectId;
 		for (int i = 0; i < PROJECTS.length; i++) {
 			String project = PROJECTS[i];
 			given()
 					.standaloneSetup(projectController)
 					.when()
-						.get(PROJECT_URL, ids[i])
+						.get(PROJECT_URL, project)
 					.then()
 						.statusCode(HttpStatus.OK.value())
-						.body("sort()", hasItem(VERSIONS[i]));
+						.body("versions.sort()", is(Arrays.asList(VERSIONS[i])));
 		}
+		//@formatter:on
+	}
+
+	@Test
+	public void active_version_is_set() {
+		//@formatter:off
+		for (int i = 0; i < PROJECTS.length; i++) {
+			String project = PROJECTS[i];
+			given()
+					.standaloneSetup(projectController)
+					.when()
+						.get(PROJECT_URL, project)
+					.then()
+						.body("activeVersion", is(ACTIVE_VERSIONS[i]));
+		}
+		//@formatter:on
 	}
 
 }

@@ -1,0 +1,104 @@
+[
+  {
+    "project": "lorem-impsum",
+    "version": "1.0",
+    "chapters": [
+      {
+        "chapterTitle": {
+          "text": "Chapter #1"
+        },
+        "chapterBody": {
+          "text": [
+            "Lorem ipsum dolor sit amet",
+            "consectetur adipiscing elit",
+            "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+          ]
+        }
+      },
+      {
+        "chapterTitle": {
+          "text": "Chapter #2"
+        },
+        "chapterBody": {
+          "text": [
+            "Ut enim ad minim veniam",
+            "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"
+          ]
+        }
+      },
+      {
+        "chapterTitle": {
+          "text": "Chapter #3"
+        },
+        "chapterBody": {
+          "text": [
+            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur"
+          ]
+        }
+      },
+      {
+        "chapterTitle": {
+          "text": "Chapter #4"
+        },
+        "chapterBody": {
+          "text": [
+            "Excepteur sint occaecat cupidatat non proident",
+            "sunt in culpa qui officia deserunt mollit anim id est laborum"
+          ]
+        }
+      }   ,
+      {
+        "chapterTitle": {
+          "text": "Chapter #5"
+        },
+        "chapterBody": {
+          "text": [
+            "Lorem ipsum dolor sit amet",
+            "consectetur adipiscing elit",
+            "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+            "Ut enim ad minim veniam",
+            "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur",
+            "Excepteur sint occaecat cupidatat non proident",
+            "sunt in culpa qui officia deserunt mollit anim id est laborum"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "project": "asciindex-doc",
+    "version": "1.0",
+    "chapters": [
+      {
+        "chapterTitle": {
+          "text": "About"
+        },
+        "chapterBody": {
+          "text": [
+            "This project is intented to be use together with excelent documenting tool http://www.methods.co.nz/asciidoc/[asciidoc]",
+            "It's intended to fill the missing features of project documentation, such as:",
+            "1. fulltext search",
+            "2. version diff"
+          ]
+        }
+      },
+      {
+        "chapterTitle": {
+          "text": "Using asciindex"
+        },
+        "chapterBody": {
+          "text": [
+            "Asciindex provides simple REST API to interact with.",
+            "Start by invoking",
+            "[source,bash]",
+            "----",
+            "#> http put :8080/index/spring-boot/1.4.0 url:http://docs.spring.io/spring-boot/docs/1.4.0.RELEASE/reference/htmlsingle/",
+            "----",
+            "NOTE: this example uses brilliant httpie command line tool, which can be found https://github.com/jkbrzt/httpie[here]"
+          ]
+        }
+      }
+    ]
+  }
+]

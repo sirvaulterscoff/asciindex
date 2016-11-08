@@ -1,12 +1,11 @@
 package asciindex.rest;
 
-import asciindex.dao.ProjectRepository;
 import asciindex.model.es.project.Project;
 import asciindex.model.rest.ResourceInfo;
 import asciindex.service.IndexQueueService;
+import asciindex.service.ProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +29,12 @@ public class IndexController {
 
 	private RestTemplate restTemplate;
 	private IndexQueueService indexQueueService;
-	private ProjectRepository projectRepository;
+	private ProjectService projectService;
 
-	public IndexController(RestTemplate restTemplate, IndexQueueService indexQueueService, ProjectRepository projectRepository) {
+	public IndexController(RestTemplate restTemplate, IndexQueueService indexQueueService, ProjectService projectService) {
 		this.restTemplate = restTemplate;
 		this.indexQueueService = indexQueueService;
-		this.projectRepository = projectRepository;
+		this.projectService = projectService;
 	}
 
 	@RequestMapping(
@@ -63,7 +62,7 @@ public class IndexController {
 	}
 
 	private void storeProjectAndVersion(String project, String version) {
-		projectRepository.save(new Project(project, version));
+		projectService.saveOrUpdate(project, version);
 	}
 
 	private ResponseEntity<Object> putToQueue(String project, String version, String content) {

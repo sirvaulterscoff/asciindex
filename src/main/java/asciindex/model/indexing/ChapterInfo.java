@@ -1,5 +1,7 @@
 package asciindex.model.indexing;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
@@ -10,9 +12,12 @@ import java.util.stream.Stream;
  * @since 18.09.2016
  */
 public class ChapterInfo {
-	@Field(type = FieldType.Nested)
+	//	@Id
+	private String id;
+	private String projectRef;
+	@Field(type = FieldType.Object)
 	private ChapterTitle chapterTitle;
-	@Field(type =  FieldType.Nested)
+	@Field(type = FieldType.Object)
 	private ChapterBody chapterBody;
 
 	public ChapterInfo() {
