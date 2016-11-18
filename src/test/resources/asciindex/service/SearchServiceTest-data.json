@@ -1,5 +1,6 @@
 [
   {
+    "id" : "1",
     "project": "lorem-impsum",
     "version": "1.0",
     "chapters": [
@@ -67,6 +68,7 @@
     ]
   },
   {
+    "id" : "2",
     "project": "asciindex-doc",
     "version": "1.0",
     "chapters": [

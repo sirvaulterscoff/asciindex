@@ -6,6 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.data.elasticsearch.annotations.Document;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -15,9 +16,9 @@ import java.util.stream.Stream;
 @Document(indexName = "#{configuration.indexName}", type = Documentation.TYPE)
 public class SearchResult {
 	private String title;
-	private final Stream<String> text;
+	private final List<String> text;
 
-	public SearchResult(String title, Stream<String> text) {
+	public SearchResult(String title, List<String> text) {
 		this.title = title;
 		this.text = text;
 	}
@@ -26,7 +27,15 @@ public class SearchResult {
 		return title;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public List<String> getText() {
+		return text;
+	}
+
 	public static SearchResult fromChapter(ChapterInfo chapterInfo) {
-		return new SearchResult(chapterInfo.getChapterTitle().getText(), chapterInfo.getChapterBody().text());
+		return new SearchResult(chapterInfo.getChapterTitle().getText(), chapterInfo.getChapterBody().textAsList());
 	}
 }

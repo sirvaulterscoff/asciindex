@@ -22,9 +22,13 @@ public class SearchController {
 	private static final Log log = LogFactory.getLog(SearchController.class);
 	SearchService searchService;
 
+	public SearchController(SearchService searchService) {
+		this.searchService = searchService;
+	}
+
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.GET)
-	public List<SearchResult> doSearch(@RequestParam(name = "q", required = true)String query) {
+	public List<SearchResult> doSearch(@RequestParam(name = "q", required = true) String query) {
 		return searchService.findByQuery(query);
 	}
 }

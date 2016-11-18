@@ -57,4 +57,16 @@ public class Documentation {
 	public void setChapters(List<ChapterInfo> chapters) {
 		this.chapters = chapters;
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String id() {
+		return id;
+	}
 }

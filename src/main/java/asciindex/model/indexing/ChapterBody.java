@@ -29,4 +29,8 @@ public class ChapterBody {
 	public void setText(List<String> text) {
 		this.text = text.stream();
 	}
+
+	public List<String> textAsList() {
+		return text.collect(Collectors.toList());
+	}
 }

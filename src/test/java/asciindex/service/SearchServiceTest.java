@@ -28,25 +28,10 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value = "classpath:elasticsearch-template-test.xml")
-public class SearchServiceTest {
-	@Autowired
-	private ElasticsearchTemplate elasticsearchTemplate;
-	@Autowired
-	ObjectMapper objectMapper;
+public class SearchServiceTest extends TextIndexLookupTest {
 	@Autowired
 	SearchService searchService;
 
-
-	@Before
-	public void setUp() throws Exception {
-		elasticsearchTemplate.createIndex(Documentation.class);
-		elasticsearchTemplate.putMapping(Documentation.class);
-
-		List<Documentation> data = objectMapper.readValue(getClass().getResourceAsStream("SearchServiceTest-data.json"), new TypeReference<List<Documentation>>() {});
-
-		data.stream().map(this::toIndexQuery).forEach(elasticsearchTemplate::index);
-		elasticsearchTemplate.refresh(Documentation.class);
-	}
 
 	@Test
 	public void searching_for_a_phrase_returns_only_matching_chapter_parts() {
@@ -56,13 +41,5 @@ public class SearchServiceTest {
 		assertThat(searchResults.get(0).title(), is("Chapter #1"));
 		assertThat(searchResults.get(1).title(), is("Chapter #5"));
 		assertThat(searchResults.get(2).title(), is("Chapter #3"));
-	}
-
-	private <R> IndexQuery toIndexQuery(Documentation documentation) {
-		IndexQuery iq = new IndexQuery();
-		iq.setIndexName("documentation");
-		iq.setType(Documentation.TYPE);
-		iq.setObject(documentation);
-		return iq;
 	}
 }
