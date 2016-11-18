@@ -47,6 +47,7 @@ jacocoTestReport {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile "io.projectreactor:reactor-core:3.0.2.RELEASE"
 	compile 'commons-io:commons-io:2.5'
 	compile 'org.apache.commons:commons-lang3:3.1'
