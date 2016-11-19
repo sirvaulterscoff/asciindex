@@ -15,7 +15,6 @@ import java.net.UnknownHostException;
 
 @SpringBootApplication
 @EnableAutoConfiguration
-@EnableWebMvc
 public class AsciindexApplication {
 
 	public static void main(String[] args) {
