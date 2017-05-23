@@ -32,6 +32,7 @@ public class Documentation {
 	public Documentation(String project, String version) {
 		this.project = project;
 		this.version = version;
+		this.id = project + ":" + version;
 	}
 
 	public String getProject() {

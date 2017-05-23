@@ -21,6 +21,35 @@
             padding: 40px 15px;
             text-align: center;
         }
+
+        .empty-results {
+            display: none;
+        }
+
+        .bs-callout {
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #eee;
+            border-left-width: 5px;
+            border-radius: 3px;
+        }
+
+        .bs-callout h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+
+        .bs-callout p:last-child {
+            margin-bottom: 0;
+        }
+
+        .bs-callout-warning {
+            border-left-color: #f0ad4e;
+        }
+
+        .bs-callout-warning h4 {
+            color: #f0ad4e;
+        }
     </style>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -63,7 +92,14 @@
         <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="button" class="btn btn-default" ic-get-from="/search" ic-include="#q" _method="GET" ic-target="#none" ic-indicator="indicator" ic-on-complete="processSearchResults(xhr);">        <span class="glyphicon glyphicon-search"></span></button>
+                    <button type="button" class="btn btn-default"
+                            ic-get-from="/search"
+                            ic-include="#q"
+                            _method="GET"
+                            ic-target="#none"
+                            ic-indicator="indicator"
+                            ic-on-complete="processSearchResults(xhr);"
+                            id="searchButton"><span class="glyphicon glyphicon-search"></span></button>
                     <i class="fa fa-spinner fa-spin" id="indicator" style="display:none"></i>
                 </div>
             </div>
@@ -71,29 +107,18 @@
         </div>
 
     </div>
+    <div class="row empty-results">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 bs-callout bs-callout-warning">
+            <h4>Ooops</h4>
+            <p>
+                Nothing found. Refine query
+            </p>
+        </div>
+    </div>
     <div class="row " id="search-res">
     </div>
 
 </div><!-- /.container -->
-<script type="application/javascript">
-    function processSearchResults(xhr) {
-        var result = JSON.parse(xhr.responseText);
-        var rendered = result.map(renderSearchItem).join(" ");
-        $("#search-res").after($.parseHTML(rendered));
-//        alert(xhr(0).title);
-    }
-    function renderSearchItem(item) {
-        return '<div class="row search-title">' +
-               '<div class="col-3"><h3>' + item.title + '</h3></div>' +
-               '</div>' +
-               '<div class="row search-text">' +
-               '<div class="col-12">' + renderSearchItemText(item.text) + '</div> ' +
-               '</div>';
-    }
-    function renderSearchItemText(text) {
-        return text.join("")
-    }
-</script>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
@@ -101,5 +126,41 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="https://intercoolerreleases-leaddynocom.netdna-ssl.com/intercooler-1.0.2.min.js"></script>
+
+<script type="application/javascript">
+    (function (jq) {
+        jq('#q').keyup(function (event) {
+            if (event.keyCode == 13) {
+                jq('#searchButton').click();
+            }
+        })
+    })($);
+    function processSearchResults(xhr) {
+        $('.search-title').empty();
+        $('.search-title').remove();
+        $('.search-text').empty();
+        $('.search-text').remove();
+        var result = JSON.parse(xhr.responseText);
+        if (result.length == 0) {
+            $('.empty-results').show();
+        } else {
+            $('.empty-results').hide();
+            var rendered = result.map(renderSearchItem).join(" ");
+            $("#search-res").after($.parseHTML(rendered));
+        }
+    }
+    function renderSearchItem(item) {
+        var v= '<div class="row search-title">' +
+               '<div class="col-3"><h3>' + item.title + '</h3></div>' +
+               '</div>' +
+               '<div class="row search-text">' +
+               '<div class="col-12">' + renderSearchItemText(item.text) + '</div> ' +
+               '</div>';
+        return v;
+    }
+    function renderSearchItemText(text) {
+        return text.join("")
+    }
+</script>
 </body>
 </html>

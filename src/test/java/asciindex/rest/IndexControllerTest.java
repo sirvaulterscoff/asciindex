@@ -1,15 +1,13 @@
 package asciindex.rest;
 
-import asciindex.dao.ProjectRepository;
-import asciindex.model.es.project.Project;
 import asciindex.service.IndexQueueService;
 import asciindex.service.ProjectService;
+import asciindex.service.SourceService;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockserver.client.server.MockServerClient;
@@ -44,6 +42,8 @@ public class IndexControllerTest {
 	IndexQueueService indexQueueService;
 	@Mock
 	ProjectService projectService;
+	@Mock
+	SourceService sourceService;
 
 	IndexController indexController;
 
@@ -58,7 +58,7 @@ public class IndexControllerTest {
 		RestAssuredMockMvc.standaloneSetup(indexController);
 		MockitoAnnotations.initMocks(this);
 
-		indexController =  new IndexController(new RestTemplate(), indexQueueService, projectService);
+		indexController =  new IndexController(new RestTemplate(), indexQueueService, sourceService, projectService);
 	}
 
 	@Test

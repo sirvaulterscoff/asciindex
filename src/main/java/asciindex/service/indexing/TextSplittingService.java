@@ -23,16 +23,16 @@ public class TextSplittingService {
 	public Flux<ChapterInfo> splitToChapters(String indexedText, SplitLevel splitLevel, LevelMatch strict) {
 		return Flux.create(new Consumer<FluxSink<ChapterInfo>>() {
 			@Override
-			public void accept(FluxSink<ChapterInfo> chapters) {
+			public void accept(FluxSink<ChapterInfo> sink) {
 				TextReader reader = new TextReader(indexedText, SplitLevel.H2, LevelMatch.STRICT);
 				reader.advanceToFirst();
 
-				chapterFromReader(chapters, reader);
+				chapterFromReader(sink, reader);
 
-				while (reader.advanceToNext() && !chapters.isCancelled()) {
-					chapterFromReader(chapters, reader);
+				while (reader.advanceToNext() && !sink.isCancelled()) {
+					chapterFromReader(sink, reader);
 				}
-				chapters.complete();
+				sink.complete();
 			}
 
 			private void chapterFromReader(FluxSink<ChapterInfo> chapters, TextReader reader) {

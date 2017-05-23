@@ -87,6 +87,7 @@ public class IndexQueueService {
 
 			IndexQuery indexQuery = new IndexQuery();
 			indexQuery.setObject(doc);
+			indexQuery.setId(doc.getId());
 			return elasticsearchTemplate.index(indexQuery);
 		} catch (RuntimeException e) {
 			log.error("Failed to index task with id {}", id, e);

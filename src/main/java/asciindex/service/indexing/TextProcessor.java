@@ -2,6 +2,8 @@ package asciindex.service.indexing;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.charfilter.HTMLStripCharFilter;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,11 +28,12 @@ public class TextProcessor {
 
 		return (Stream<String>) reader
 				.map(StringReader::new)
-				.map(HTMLStripCharFilter::new)
+//				.map(HTMLStripCharFilter::new)
 				.map(r -> readerToString(r))
 				.flatMap(list -> list.stream())
 				.map(String::trim)
-				.filter(notEmpty);
+				.filter(notEmpty)
+				.map(text -> Jsoup.clean(text, Whitelist.relaxed()));
 	}
 
 

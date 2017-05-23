@@ -1,4 +1,4 @@
-package asciindex.service;
+	package asciindex.service;
 
 import asciindex.model.indexing.ChapterInfo;
 import asciindex.model.indexing.ChapterTitle;
@@ -22,6 +22,8 @@ import org.springframework.data.elasticsearch.core.DefaultEntityMapper;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.EntityMapper;
 import org.springframework.data.elasticsearch.core.SearchResultMapper;
+import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
+import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
 import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
@@ -54,13 +56,17 @@ public class SearchService {
 		final NativeSearchQuery searchQuery = new NativeSearchQuery(chaptersQuery);
 		searchQuery.addSourceFilter(new FetchSourceFilter(new String[0], new String[]{"*"}));
 		Page<SearchResult> results = elasticsearchTemplate.queryForPage(searchQuery, SearchResult.class, new SearchResultMapper() {
+
 			@Override
-			public <T> Page<T> mapResults(SearchResponse response, Class<T> clazz, Pageable pageable) {
+			public <T> AggregatedPage<T> mapResults(SearchResponse response, Class<T> clazz, Pageable pageable) {
 				List<SearchResult> hits = Arrays.stream(response.getHits().hits())
 						.flatMap(hit -> hit.getInnerHits().values().stream())
 						.flatMap(h -> Arrays.stream(h.hits()))
-						.map(SearchHit::sourceAsString).map(SearchService.this::readChpaterInfo).map(SearchResult::fromChapter).collect(Collectors.toList());
-				return (Page<T>) new PageImpl<SearchResult>(hits);
+						.map(SearchHit::sourceAsString)
+						.map(SearchService.this::readChpaterInfo)
+						.map(SearchResult::fromChapter)
+						.collect(Collectors.toList());
+				return  new AggregatedPageImpl<T>((List<T>) hits);
 			}
 		});
 		return results.getContent();

@@ -1,9 +1,9 @@
 package asciindex.rest;
 
-import asciindex.model.es.project.Project;
 import asciindex.model.rest.ResourceInfo;
 import asciindex.service.IndexQueueService;
 import asciindex.service.ProjectService;
+import asciindex.service.SourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -27,13 +27,17 @@ import org.springframework.web.client.RestTemplate;
 public class IndexController {
 	private static final Logger log = LoggerFactory.getLogger(IndexController.class);
 
-	private RestTemplate restTemplate;
-	private IndexQueueService indexQueueService;
-	private ProjectService projectService;
+	private final RestTemplate restTemplate;
+	private final IndexQueueService indexQueueService;
+	private final SourceService sourceService;
+	private final ProjectService projectService;
 
-	public IndexController(RestTemplate restTemplate, IndexQueueService indexQueueService, ProjectService projectService) {
+	public IndexController(RestTemplate restTemplate,
+	                       IndexQueueService indexQueueService,
+	                       SourceService sourceService, ProjectService projectService) {
 		this.restTemplate = restTemplate;
 		this.indexQueueService = indexQueueService;
+		this.sourceService = sourceService;
 		this.projectService = projectService;
 	}
 
@@ -50,6 +54,7 @@ public class IndexController {
 			if (url == null || url.isEmpty()) {
 				return new ResponseEntity<>("No content or url header specified in request", HttpStatus.BAD_REQUEST);
 			}
+			log.info("Downloading content for {}:{}", project, version);
 			ResponseEntity<String> result = restTemplate.getForEntity(url, String.class);
 			if (result.getStatusCode().is2xxSuccessful()) {
 				indexedContent = result.getBody();
@@ -69,6 +74,8 @@ public class IndexController {
 		log.debug("Adding task to scan project {} v {}", project, version);
 		String queueId = indexQueueService.addToQueue(project, version, content);
 		log.debug("Task added to queue with id {}", queueId);
+		sourceService.storeSource(project, version, content);
+		log.debug("Saved content for {}:{}", project, version);
 		MultiValueMap<String, String> headers = new HttpHeaders();
 		headers.set(HttpHeaders.LOCATION, "/queue/index/" + String.valueOf(queueId));
 		return new ResponseEntity<>(new ResourceInfo("/queue/index", queueId), headers, HttpStatus.ACCEPTED);

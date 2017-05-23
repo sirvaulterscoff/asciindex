@@ -5,7 +5,7 @@ package asciindex.service.indexing;
  * @since 18.09.2016
  */
 public enum SplitLevel {
-	H1("h1"), H2("h2"), H3("h3"), H4("h4"), H5("h5");
+	H1("h1"), H2("h2"), H3("h3"), H4("h4"), H5("h5"), H6("h6");
 
 	private String tagName;
 
